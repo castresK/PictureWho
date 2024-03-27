@@ -1,113 +1,144 @@
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.*;
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
-public class App extends JFrame {
-    private JLabel imageLabel;
+import java.util.Optional;
 
-    public App() {
-        setTitle("Picture Who");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1000, 650);
-        setResizable(false);
-        getContentPane().setBackground(new Color(131, 101, 172)); 
+public class App extends Application {
+    private ImageView imageView;
 
-        JPanel topPanel = new JPanel(new BorderLayout());
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("Picture Who");
 
-        JLabel pictureWhoLabel = new JLabel("PICTURE WHO?");
-        pictureWhoLabel.setHorizontalAlignment(JLabel.CENTER);
-        pictureWhoLabel.setFont(new Font("Segoe UI", Font.BOLD, 33));
-        pictureWhoLabel.setForeground(Color.WHITE);
-        pictureWhoLabel.setOpaque(true);
-        pictureWhoLabel.setBackground(Color.decode("#5E4580"));
-        topPanel.add(pictureWhoLabel, BorderLayout.NORTH);
+        // Top Panel
+        Label pictureWhoLabel = new Label("PICTURE WHO?");
+        pictureWhoLabel.setStyle("-fx-font-size: 33; -fx-font-weight: bold; -fx-text-fill: white; -fx-background-color: #5E4580");
+        BorderPane.setAlignment(pictureWhoLabel, Pos.TOP_CENTER);
 
-        ImageIcon icon = new ImageIcon("img/Bone White Blue Groovy You Matter Desktop Wallpaper (1).png");
-        imageLabel = new JLabel(icon);
-        imageLabel.setHorizontalAlignment(JLabel.CENTER);
-        imageLabel.setOpaque(true);
-        imageLabel.setBackground(Color.decode("#5E4580"));
-        imageLabel.setVerticalAlignment(JLabel.BOTTOM); 
-        topPanel.add(imageLabel, BorderLayout.CENTER);
+        imageView = new ImageView(new Image("file:img/Bone White Blue Groovy You Matter Desktop Wallpaper (1).png"));
+        imageView.setFitWidth(600);
+        imageView.setFitHeight(400);
+        imageView.setPreserveRatio(true);
+        imageView.setSmooth(true);
+        imageView.setCache(true);
 
-        // Add the top panel to the frame
-        add(topPanel, BorderLayout.CENTER);
+        VBox imageContainer = new VBox();
+        imageContainer.getChildren().add(imageView);
+        VBox.setMargin(imageView, new Insets(70, 0, 50, 390));
 
-        // Create buttons panel
-        JPanel buttonPanel = new JPanel(new BorderLayout());
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        buttonPanel.setBackground(Color.decode("#5E4580")); 
+        BorderPane topPanel = new BorderPane();
+        topPanel.setBackground(new Background(new BackgroundFill(Color.rgb(131, 101, 172), CornerRadii.EMPTY, Insets.EMPTY)));
+        topPanel.setTop(pictureWhoLabel);
+        topPanel.setCenter(imageContainer);
 
-        // Play button
-        JButton playButton = new JButton("Play");
-        playButton.setFont(new Font("Segoe UI Black", Font.PLAIN, 24));
-        playButton.setForeground(Color.decode("#5E4580")); 
-        playButton.setBackground(Color.WHITE); 
-        playButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(App.this, "Starting the game...");
-                openGameWindow(); 
+        // Play Button
+        Button playButton = new Button("Play");
+        playButton.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #5E4580; -fx-background-color: white;");
+        playButton.setOnAction(e -> {
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Game Starting");
+            alert.setHeaderText(null);
+            alert.setContentText("The game is starting...");
+            alert.showAndWait();
+
+            openGameWindow();
+            primaryStage.hide();
+        });
+
+        // Exit Button
+        Button exitButton = new Button("Exit");
+        exitButton.setStyle("-fx-font-size: 24; -fx-font-weight: bold; -fx-text-fill: #5E4580; -fx-background-color: white;");
+        exitButton.setOnAction(e -> {
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Exit");
+            alert.setHeaderText(null);
+            alert.setContentText("Are you sure you want to exit?");
+
+            ButtonType yesButton = new ButtonType("Yes");
+            ButtonType noButton = new ButtonType("No");
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == yesButton) {
+                primaryStage.close();
             }
         });
 
-        // Exit button
-        JButton exitButton = new JButton("Exit");
-        exitButton.setFont(new Font("Segoe UI Black", Font.PLAIN, 24));
-        exitButton.setForeground(Color.decode("#5E4580")); 
-        exitButton.setBackground(Color.WHITE); 
-        exitButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int choice = JOptionPane.showConfirmDialog(App.this, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION);
-                if (choice == JOptionPane.YES_OPTION) {
-                    dispose(); 
-                }
-            }
-        });
+        HBox buttonPanel = new HBox(20, playButton, exitButton);
+        buttonPanel.setAlignment(Pos.CENTER);
+        buttonPanel.setPadding(new Insets(10));
 
-        // Add buttons to button panel
-        buttonPanel.add(playButton, BorderLayout.WEST);
-        buttonPanel.add(exitButton, BorderLayout.EAST);
+        BorderPane mainPane = new BorderPane();
+        mainPane.setBackground(new Background(new BackgroundFill(Color.rgb(131, 101, 172), CornerRadii.EMPTY, Insets.EMPTY)));
+        mainPane.setCenter(topPanel);
+        mainPane.setBottom(buttonPanel);
 
-        add(buttonPanel, BorderLayout.SOUTH);
+        Scene scene = new Scene(mainPane, 1000, 650);
+        primaryStage.setScene(scene);
+        primaryStage.setResizable(false);
+        primaryStage.show();
     }
 
     private void openGameWindow() {
-        JFrame gameFrame = new JFrame("Game Window");
-        gameFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        gameFrame.setSize(1000, 600);
+        Stage gameStage = new Stage();
+        gameStage.setTitle("Game Window");
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        gameFrame.getContentPane().add(mainPanel);
-
-        JPanel imagePanel = new JPanel(new GridLayout(2, 2));
-        mainPanel.add(imagePanel, BorderLayout.CENTER);
+        GridPane imagePanel = new GridPane();
+        imagePanel.setPadding(new Insets(10));
+        imagePanel.setAlignment(Pos.CENTER);
+        imagePanel.setHgap(10);
+        imagePanel.setVgap(10);
 
         for (int i = 0; i < 4; i++) {
-            JLabel imageLabel = new JLabel();
-            imageLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            imagePanel.add(imageLabel);
+            ImageView imageView = new ImageView();
+            imageView.setFitWidth(200);
+            imageView.setFitHeight(200);
+            imageView.setPreserveRatio(true);
+            imageView.setSmooth(true);
+            imageView.setCache(true);
+            imageView.setStyle("-fx-border-color: black;");
+            imagePanel.add(imageView, i % 2, i / 2);
         }
 
-        JPanel smallerPanel = new JPanel(new GridLayout(1, 3));
-        mainPanel.add(smallerPanel, BorderLayout.SOUTH);
+        HBox smallerPanel = new HBox(10);
+        smallerPanel.setAlignment(Pos.CENTER);
+        smallerPanel.setPadding(new Insets(10));
 
         for (int i = 0; i < 3; i++) {
-            JLabel smallLabel = new JLabel();
-            smallLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
-            smallerPanel.add(smallLabel);
+            ImageView smallImageView = new ImageView();
+            smallImageView.setFitWidth(100);
+            smallImageView.setFitHeight(100);
+            smallImageView.setPreserveRatio(true);
+            smallImageView.setSmooth(true);
+            smallImageView.setCache(true);
+            smallImageView.setStyle("-fx-border-color: black;");
+            smallerPanel.getChildren().add(smallImageView);
         }
 
-        gameFrame.pack();
-        gameFrame.setLocationRelativeTo(null); 
-        gameFrame.setVisible(true);
+        VBox mainPanel = new VBox(20, imagePanel, smallerPanel);
+        mainPanel.setAlignment(Pos.CENTER);
+        mainPanel.setBackground(new Background(new BackgroundFill(Color.rgb(131, 101, 172), CornerRadii.EMPTY, Insets.EMPTY)));
+
+        Scene scene = new Scene(mainPanel, 1000, 600);
+        gameStage.setScene(scene);
+        gameStage.show();
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                App game = new App();
-                game.setVisible(true);
-            }
-        });
+        launch(args);
     }
 }
