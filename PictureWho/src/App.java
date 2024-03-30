@@ -5,7 +5,9 @@ import java.awt.event.*;
 public class App extends JFrame {
 
     private JLabel imageLabel;
+    @SuppressWarnings("unused")
     private int currentLevel = 1;
+    @SuppressWarnings("unused")
     private LaunchPage launchpage;
     private JButton submitButton; 
 
@@ -127,7 +129,7 @@ public class App extends JFrame {
         JLabel imageLabel3 = new JLabel(scaledImageIcon3);
         JLabel imageLabel4 = new JLabel(scaledImageIcon4);
 
-        imagePanel.add(imageLabel1);
+        imagePanel.add(imageLabel1);   
         imagePanel.add(imageLabel2);
         imagePanel.add(imageLabel3);
         imagePanel.add(imageLabel4);
@@ -175,7 +177,7 @@ public class App extends JFrame {
     private void openNextLevel() {
         currentLevel++;
         JOptionPane.showMessageDialog(this, "Proceed to next level bro");
-        
+
         //proceed to the next level
         launchpage = new LaunchPage();
     }
