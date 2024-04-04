@@ -1,28 +1,27 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.IOException;
 
 public class App extends JFrame {
 
     private JLabel imageLabel;
-    private int currentLevel = 1;
-    private LaunchPage launchpage;
-    private JButton submitButton;
 
     public App() {
-        setSize(1000, 800);
+        setSize(1000, 650);
         setTitle("Picture Who");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setResizable(false);
         getContentPane().setBackground(new Color(131, 101, 172));
         setLayout(new BorderLayout());
-    
+
         JPanel topPanel = new JPanel(new BorderLayout());
-    
+
         // title of the window app
         JLabel pictureWhoLabel = new JLabel("PICTURE WHO?");
         pictureWhoLabel.setHorizontalAlignment(JLabel.CENTER);
-        pictureWhoLabel.setFont(new Font("Segoe UI", Font.BOLD, 33));
+        pictureWhoLabel.setFont(loadFont("src/PaytoneOne-Regular.ttf", Font.BOLD, 33));
         pictureWhoLabel.setForeground(Color.WHITE);
         pictureWhoLabel.setOpaque(true);
         pictureWhoLabel.setBackground(Color.decode("#5E4580"));
@@ -31,20 +30,19 @@ public class App extends JFrame {
         int bottomPadding = 50;
         int rightPadding = 0;
         pictureWhoLabel.setBorder(BorderFactory.createEmptyBorder(topPadding, leftPadding, bottomPadding, rightPadding));
-    
+
         topPanel.add(pictureWhoLabel, BorderLayout.NORTH);
         add(topPanel, BorderLayout.NORTH);
-    
-        JPanel buttonPanel = new JPanel(new GridLayout(4, 1, 10, 10)); 
-        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 430, -30, 430)); 
+
+        JPanel buttonPanel = new JPanel(new GridLayout(4, 1, 10, 10));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 430, -30, 430));
         buttonPanel.setBackground(Color.decode("#5E4580"));
-    
+
         // Play button
         JButton playButton = new JButton("Play");
-        playButton.setFont(new Font("Paytone One", Font.BOLD, 20));
+        playButton.setFont(new Font("segoe ui black", Font.BOLD, 23));
         playButton.setForeground(Color.decode("#5E4580"));
         playButton.setBackground(Color.WHITE);
-        playButton.setPreferredSize(new Dimension(80, 10));
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 openDifficultyWindow();
@@ -54,18 +52,16 @@ public class App extends JFrame {
     
         // Settings button
         JButton settingsButton = new JButton("Settings");
-        settingsButton.setFont(new Font("Paytone One", Font.BOLD, 20));
+        settingsButton.setFont(new Font("segoe ui black", Font.BOLD, 20));
         settingsButton.setForeground(Color.decode("#5E4580"));
         settingsButton.setBackground(Color.WHITE);
-        settingsButton.setPreferredSize(new Dimension(80, 10));
         buttonPanel.add(settingsButton);
     
         // Exit button
         JButton exitButton = new JButton("Exit");
-        exitButton.setFont(new Font("Paytone One", Font.BOLD, 20));
+        exitButton.setFont(new Font("segoe ui black", Font.BOLD, 23));
         exitButton.setForeground(Color.decode("#5E4580"));
-        exitButton.setBackground(Color.WHITE);
-        exitButton.setPreferredSize(new Dimension(80, 10));
+        exitButton.setBackground(Color.WHITE);;
         exitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 int choice = JOptionPane.showConfirmDialog(App.this, "Are you sure you want to exit?", "Exit", JOptionPane.YES_NO_OPTION);
@@ -77,8 +73,9 @@ public class App extends JFrame {
         buttonPanel.add(exitButton);
     
         add(buttonPanel, BorderLayout.CENTER);
-    
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT)); 
+        add(buttonPanel, BorderLayout.CENTER);
+
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         bottomPanel.setBackground(Color.decode("#5E4580"));
 
         ImageIcon imageIcon = new ImageIcon("img/thinking.png");
@@ -87,7 +84,6 @@ public class App extends JFrame {
 
         add(bottomPanel, BorderLayout.SOUTH);
 
-    
         setLocationRelativeTo(null);
     }
 
@@ -134,6 +130,18 @@ public class App extends JFrame {
         difficultyFrame.add(difficultyPanel);
         difficultyFrame.setLocationRelativeTo(null);
         difficultyFrame.setVisible(true);
+    }
+
+    // Method to load custom font with specified style and size
+    private Font loadFont(String path, int style, float size) {
+        try {
+            File file = new File(path);
+            return Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(style, size);
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+            // If font loading fails, return default font
+            return new Font(Font.SANS_SERIF, Font.PLAIN, (int) size);
+        }
     }
 
     public static void main(String[] args) {
