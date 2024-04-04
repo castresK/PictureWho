@@ -151,7 +151,7 @@ public class App extends JFrame {
             return Font.createFont(Font.TRUETYPE_FONT, file).deriveFont(style, size);
         } catch (IOException | FontFormatException e) {
             e.printStackTrace();
-            // If font loading fails, return default font
+
             return new Font(Font.SANS_SERIF, Font.PLAIN, (int) size);
         }
     }
