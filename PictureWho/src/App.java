@@ -91,16 +91,28 @@ public class App extends JFrame {
     private void openDifficultyWindow() {
         JFrame difficultyFrame = new JFrame("Select Difficulty");
         difficultyFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        difficultyFrame.setSize(300, 200);
+        difficultyFrame.setSize(700, 200);
         difficultyFrame.setResizable(false);
+        
 
-        JPanel difficultyPanel = new JPanel(new GridLayout(3, 1));
-        difficultyPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel difficultyPanel = new JPanel(new GridLayout(1, 0));
+        difficultyPanel.setBorder(BorderFactory.createEmptyBorder(20, 10, 20, 10));
 
         // Buttons for different difficulty levels
         JButton easyButton = new JButton("Easy");
+        easyButton.setFont(new Font("segoe ui black", Font.BOLD, 23));
+        easyButton.setForeground(Color.decode("#5E4580"));
+        easyButton.setBackground(Color.WHITE);
+
         JButton moderateButton = new JButton("Moderate");
+        moderateButton.setFont(new Font("segoe ui black", Font.BOLD, 23));
+        moderateButton.setForeground(Color.decode("#5E4580"));
+        moderateButton.setBackground(Color.WHITE);
+
         JButton hardButton = new JButton("Hard");
+        hardButton.setFont(new Font("segoe ui black", Font.BOLD, 23));
+        hardButton.setForeground(Color.decode("#5E4580"));
+        hardButton.setBackground(Color.WHITE);
 
         easyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
